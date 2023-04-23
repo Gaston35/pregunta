@@ -20,14 +20,11 @@
 			position: relative;
 		}
 	</style>
-
 	<script>
-            const API_KEY2 = "sk-S71K0c95eS0GUMQCw6Jc";
-            const API_KEY3 = "T3BlbkFJ1xw0RA2KxIBtC1x3pixt";
 		const userAction = async () => {
 			const reply = "" + document.forms["input"]["reply"].value;
-			const input = document.forms["input"]["input"].value + " aclaración:" + document.forms["input"]["input2"].value;
-			const response = await fetch('https://api.openai.com/v1/chat/completions', {
+			const input = document.forms["input"]["input"].value;
+			const reponse = await fetch('https://api.openai.com/v1/chat/completions', {
 				method: "POST",
 				body: JSON.stringify({"model": "gpt-3.5-turbo", "messages": 
 					[{"role":"assistant","content": reply},
@@ -35,7 +32,7 @@
 					]}),
 				headers: {
 					"content-type": "application/json",
-					Authorization: "Bearer " + API_KEY2 + API_KEY3,
+					Authorization: "Bearer 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",
 				}
 			}).then((response) => {
 				if (response.ok) {
@@ -44,7 +41,6 @@
 							"<br><br>Pibe con dudas: ",document.forms["input"]["input"].value,"<br><br>Respuesta Piola: ",json.choices[0].message.content];
 						document.forms["input"]["reply"].value = json.choices[0].message.content;
 						document.forms["input"]["input"].value = "";
-                                    document.forms["input"]["input2"].value = "";
 						document.getElementById("output").innerHTML = AnswerLog.join("");
 					});
 				}
@@ -58,13 +54,11 @@
 			<p id="output" style="white-space: pre-wrap;"></p>
 			<form id="input">
 				<input name="reply" placeholder="" readonly style="display: none;">
-				<input name="input" autofocus placeholder="Hacete una pregunta buena" style="width: 95%;"><br>
-                        <input name="input2" autofocus placeholder="Hacete una aclaración" style="width: 95%;"><br>
+				<input name="input" autofocus placeholder="Hacete una pregunta" style="width: 95%;"><br>
 				<button type="button" onclick="userAction()">Enviar</button>
 			</form>
 		</div>
 	</div>
 </body>
 </html>
-
 
