@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,11 +20,12 @@
 		}
 	</style>
 	<script>
-            const API_KEY2 = "sk-S71K0c95eS0GUMQCw6Jc";
-            const API_KEY3 = "T3BlbkFJ1xw0RA2KxIBtC1x3pixt";
+
+            const API_KEY2 = "sk-U6dw1xYrLxYXPeasxMAYT";
+            const API_KEY3 = "3BlbkFJVflCl3JVit4SL2s4otOP";
 		const userAction = async () => {
 			const reply = "" + document.forms["input"]["reply"].value;
-			const input = "responde en función de la pregunta que dejo a continuación con una limitante de solo dos oraciones, y al final haz una segunda pregunta que podría continuar el desarrollo de la respuesta" + document.forms["input"]["input"].value;
+			const input = "responde en función de la pregunta que dejo a continuación con una limitante de solo dos oraciones, y al final haz una segunda pregunta provocativa que podría continuar el desarrollo profundo del tema: " + document.forms["input"]["input"].value;
 			const request = {
 				model: "gpt-3.5-turbo",
 				messages: [
@@ -78,5 +78,3 @@
 	</div>
 </body>
 </html>
-
-
