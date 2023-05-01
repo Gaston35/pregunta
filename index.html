@@ -1,80 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ChatGPT</title>
-	<style type="text/css">
-		html, body{
-			min-width: 320px;
-			text-align: center;
-			font-family: Courier New;
-		}
-		.wrapper {
-			width: 100%;
-			display: inline-flex;
-			text-align: left;
-		}
-		.container {
-			width: 90%;
-			margin: 0 auto;
-			position: relative;
-		}
-	</style>
-	<script>
+  <title>Next_Level</title>
+  <style type="text/css">
+    html, body{
+      min-width: 320px;
+      text-align: center;
+      font-family: Courier New;
+    }
+    .wrapper {
+      width: 100%;
+      display: inline-flex;
+      text-align: left;
+    }
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      position: relative;
+    }
+    button[type="button"] {
+      margin-top: 10px;
+    }
+  </style>
+  <script>
+            const API_KEY2 = "sk-3638SSkygu5dLncLYi0mT3BlbkF";
+            const API_KEY3 = "JqB8PyivPvJZdXfqoVfXm";
+    const userAction = async () => {
+      const reply = "" + document.forms["input"]["reply"].value;
+      const input = document.forms["input"]["input"].value;
+      const input2 = document.forms["input"]["input2"].value;
+      const input3 = document.forms["input"]["input3"].value;
+      const input4 = document.forms["input"]["input4"].value;
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: "POST",
+        body: JSON.stringify({
+          "model": "gpt-3.5-turbo", 
+          "messages": [{
+            "role": "assistant",
+            "content": reply
+          }, {
+            "role": "user",
+            "content": "Tengo la siguiente edad: " + input + ". Mi ocupación es: " + input2 + ". Mi formación es: " + input3 + ". Mi objetivo es: " + input4
+          }]
+        }),
+        headers: {
+          "content-type": "application/json",
+          Authorization: "Bearer " + API_KEY2 + API_KEY3,
+        }
+      });
+      
+      if (response.ok) {
+        const json = await response.json();
+        const answer = json.choices[0].message.content;
+        const outputElement = document.getElementById("output");
+        outputElement.innerHTML = "<br><br>Respuesta: " + answer;
+        const formElement = document.getElementById("input");
+        formElement.parentNode.removeChild(formElement);
+        const voiceButton = document.createElement("button");
+        voiceButton.type = "button";
+        voiceButton.textContent = "Escuchar respuesta";
+        voiceButton.onclick = addVoice;
+        outputElement.appendChild(voiceButton);
+        const downloadButton = document.createElement("button");
+        downloadButton.type = "button";
+        downloadButton.textContent = "Descargar respuesta";
+        downloadButton.onclick = downloadText;
+        outputElement.appendChild(downloadButton);
+      }
+    }
 
-            const API_KEY2 = "sk-U6dw1xYrLxYXPeasxMAYT";
-            const API_KEY3 = "3BlbkFJVflCl3JVit4SL2s4otOP";
-		const userAction = async () => {
-			const reply = "" + document.forms["input"]["reply"].value;
-			const input = "responde en función de la pregunta que dejo a continuación con una limitante de solo dos oraciones, y al final haz una segunda pregunta provocativa que podría continuar el desarrollo profundo del tema: " + document.forms["input"]["input"].value;
-			const request = {
-				model: "gpt-3.5-turbo",
-				messages: [
-					{role: "assistant", content: reply},
-					{role: "user", content: input}
-				]
-			};
-			const response = await fetch('https://api.openai.com/v1/chat/completions', {
-				method: "POST",
-				body: JSON.stringify(request),
-				headers: {
-					"content-type": "application/json",
-					Authorization: "Bearer " + API_KEY2 + API_KEY3,
-				}
-			}).then((response) => {
-				if (response.ok) {
-					response.json().then((json) => {
-						const answerLog = [
-							document.getElementById("output").innerHTML,
-							"<br><br>Pibe con dudas: ",
-							document.forms["input"]["input"].value,
-							"<br><br>Respuesta Piola: ",
-							json.choices[0].message.content
-						];
-						document.forms["input"]["reply"].value = json.choices[0].message.content;
-						document.forms["input"]["input"].value = "";
-						document.getElementById("output").innerHTML = answerLog.join("");
-						if (json.choices[0].text.trim().endsWith("?")) {
-							document.forms["input"]["input"].placeholder = json.choices[0].text;
-						} else {
-							document.forms["input"]["input"].placeholder = "Hacete otra pregunta";
-						}
-					});
-				}
-			});
-		}
-	</script>
+    function addVoice() {
+      const outputText = document.getElementById("output").textContent;
+      const synth = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(outputText);
+      synth.speak(utterance);
+    }
+
+    function downloadText() {
+      const outputText = document.getElementById("output").textContent;
+      const blob = new Blob([outputText], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "respuesta.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
 </head>
 <body>
-	<div class = "wrapper">
-		<div class = "container">
-			<p id="output" style="white-space: pre-wrap;"></p>
-			<form id="input">
-				<input name="reply" placeholder="" readonly style="display: none;">
-				<input name="input" autofocus placeholder="Hacete una pregunta" style="width: 95%;">
-				<br>
-				<button type="button" onclick="userAction()">Enviar</button>
-			</form>
-		</div>
-	</div>
+<div class="wrapper">
+  <div class="container">
+    <p id="output" style="white-space: pre-wrap;"></p>
+    <form id="input">
+      <div>
+        <input name="reply" placeholder="" readonly style="display: none;">
+      </div>
+      <div>
+        <input name="input" autofocus placeholder="Edad" style="width: 45%;">
+        <input name="input2" autofocus placeholder="Puesto Actual" style="width: 45%; margin-left: 10px;">
+      </div>
+      <div>
+        <input name="input3" autofocus placeholder="Formacion Academica" style="width: 45%;">
+        <input name="input4" autofocus placeholder="Objetivo a lograr" style="width: 45%; margin-left: 10px;">
+      </div>
+      <button type="button" onclick="userAction()">Enviar</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>
